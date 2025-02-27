@@ -582,7 +582,9 @@
         function refreshPreview() {
             const frame = document.getElementById('previewFrame');
             const currentUrl = frame.src || menuData[0].url;
-            loadPreview(currentUrl);
+            const currentDate = menuData[0].date;
+            const currentTitle = menuData[0].title;
+            loadPreview(currentUrl, currentDate, currentTitle);
         }
 
         // 修改新窗口打开函数
