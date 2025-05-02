@@ -1,0 +1,217 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(180deg, #2d0036 0%, #a13c7c 60%, #ffb36b 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+}
+.top-bar {
+    width: 100%;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 1.1rem;
+    opacity: 0.8;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+#greeting.hide {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+#greeting {
+    display: inline-block;
+    background: rgba(40,0,50,0.96);
+    padding: 16px 36px 22px 36px;
+    border-radius: 0 0 22px 22px;
+    font-size: 1.3rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+    opacity: 1;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    letter-spacing: 1px;
+    transition: opacity 0.5s;
+}
+.main-content {
+    margin: 0 auto;
+    margin-top: 32px;
+    background: rgba(40, 0, 50, 0.7);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    padding: 40px 32px 32px 32px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.avatar-logo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.8rem;
+    color: #fff;
+    letter-spacing: 2px;
+}
+.logo .dot {
+    color: #ffb36b;
+    font-size: 1.5rem;
+}
+.right-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 18px;
+    gap: 32px;
+}
+.quote-block {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    flex: 1;
+    min-width: 160px;
+}
+.quote-text {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+.quote-author {
+    text-align: right;
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+.datetime-block {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    min-width: 180px;
+    text-align: center;
+}
+.date {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+.time {
+    font-size: 2rem;
+    font-family: 'Consolas', monospace;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+.weather {
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+.signature-block {
+    background: rgba(255,255,255,0.10);
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin: 24px 0 16px 0;
+    width: 100%;
+    text-align: left;
+}
+.signature-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+}
+.signature-text {
+    font-size: 1rem;
+    opacity: 0.85;
+}
+.social-links {
+    display: flex;
+    gap: 18px;
+    margin: 18px 0 24px 0;
+}
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+.social-links a:hover {
+    background: #ffb36b;
+}
+.social-links img {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+.main-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 8px;
+}
+.main-btn {
+    display: inline-block;
+    background: #ffb36b;
+    color: #2d0036;
+    font-weight: bold;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition: background 0.2s, color 0.2s;
+}
+.main-btn:hover {
+    background: #fff;
+    color: #a13c7c;
+}
+footer {
+    margin: 32px 0 12px 0;
+    text-align: center;
+    font-size: 1rem;
+    opacity: 0.7;
+}
+@media (max-width: 700px) {
+    .main-content {
+        max-width: 98vw;
+        padding: 18px 4vw 18px 4vw;
+    }
+    .right-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .main-btn {
+        width: 90vw;
+        box-sizing: border-box;
+        text-align: center;
+    }
+} 

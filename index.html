@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryokuryuneko</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <span class="info" id="greeting">Ryokuryuneko 欢迎来到我的主页</span>
+        </div>
+        <div class="main-content">
+            <div class="avatar-logo">
+                <img class="avatar" src="https://wzl0813.github.io/images/Ryokuryuneko.png" alt="avatar">
+                <span class="logo">Ryokuryuneko<span class="dot">.top</span></span>
+            </div>
+            <div class="right-info">
+                <div class="quote-block">
+                    <div class="quote-text">春来暑往，秋去冬藏，又是很多年过去了</div>
+                    <div class="quote-author">-「Ryokuryuneko」</div>
+                </div>
+                <div class="datetime-block">
+                    <div class="date" id="date"></div>
+                    <div class="time" id="time"></div>
+                </div>
+            </div>
+            <div class="signature-block">
+                <div class="signature-title">Hello World！-「Ryokuryuneko」</div>
+                <div class="signature-text">一场秋雨一场凉，秋心韵满泪为霜</div>
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/WZL0813" title="去 Github 看看"><img src="./images/icon/github.png" alt="Github"/></a>
+                <a href="https://space.bilibili.com/1948701915" title="(゜-゜)つロ 干杯 ~"><img src="./images/icon/bilibili.png" alt="BiliBili"/></a>
+                <a href="https://res.abeim.cn/api/qq/?qq=2411273874" title="有什么事吗"><img src="./images/icon/qq.png" alt="QQ"/></a>
+                <a href="mailto:wangzilong3565@163.com" title="来封 Email ~"><img src="./images/icon/email.png" alt="Email"/></a>
+                <a href="https://t.me/+O2aizNXEoOgyZThl" title="你懂的 ~"><img src="./images/icon/telegram.png" alt="Telegram"/></a>
+            </div>
+
+            <div class="main-buttons">
+                <a class="main-btn" href="https://wzl0813.github.io/">起始页</a>
+                <a class="main-btn" href="https://wzl0813.github.io/WZL.html">介绍</a>
+                <a class="main-btn" href="https://wzl0813.github.io/More.html">更多</a>
+                <a class="main-btn" href="https://wzl0813.github.io/XueXiaoShiPu.html">学校食谱</a>
+                <a class="main-btn" href="https://wzl0813.github.io/index-newold.html">简单</a>
+                <a class="main-btn" href="https://github.com/WZL0813">GitHub</a>
+            </div>
+        </div>
+        <footer>
+            Copyright © Ryokuryuneko &amp; Made by WangZiLong
+        </footer>
+    </div>
+    <script src="script.js"></script>
+    <style>
+        /* 美化播放控件 */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 16px 24px;
+            border-radius: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(12px);
+            transition: 0.3s all ease;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2196F3, #4FC3F7);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s all ease;
+        }
+
+        .control-btn.playing {
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .volume-slider {
+            width: 120px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            opacity: 0;
+            transition: 0.3s opacity ease;
+        }
+
+        .music-control:hover .volume-slider {
+            opacity: 1;
+        }
+
+        /* 引导提示层 */
+        .play-guide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .guide-card {
+            background: rgba(255, 255, 255, 0);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-control">
+        <button class="control-btn">🎵</button>
+        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <div class="play-guide" id="guide">
+        <div class="guide-card">
+            <h3>🎧 欢迎访问</h3>
+            <p>点击下方按钮启用背景音乐</p>
+            <button id="activateBtn" style="padding:12px 24px;background:#2196F3;color:white;border:none;border-radius:8px;cursor:pointer;">
+                启用音乐
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 音频初始化
+        const audio = new Audio();
+        audio.src = './music/GH.aac';  // 请确保存在此文件
+        audio.loop = true;
+        audio.volume = 0.5;
+
+        // DOM元素
+        const controlBtn = document.querySelector('.control-btn');
+        const volumeSlider = document.querySelector('.volume-slider');
+        const guide = document.getElementById('guide');
+        let isPlaying = false;
+
+        // 自动播放策略
+        const initAudio = () => {
+            // 分阶段播放策略
+            audio.muted = true;
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        guide.style.display = 'none';
+                        audio.muted = false;
+                        controlBtn.classList.add('playing');
+                        isPlaying = true;
+                    })
+                    .catch(error => {
+                        if (error.name === 'NotAllowedError') {
+                            guide.style.display = 'flex';
+                        }
+                    });
+            }
+        };
+
+        // 用户交互处理
+        document.addEventListener('click', () => {
+            if (!isPlaying) initAudio();
+        }, { once: true });
+
+        // 控制按钮事件
+        controlBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            controlBtn.classList.toggle('playing');
+            isPlaying ? audio.play() : audio.pause();
+        });
+
+        // 音量控制
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+
+        // 引导按钮事件
+        document.getElementById('activateBtn').addEventListener('click', () => {
+            guide.style.display = 'none';
+            initAudio();
+        });
+
+        // 错误处理
+        audio.addEventListener('error', (e) => {
+            console.error('音频错误:', e.target.error);
+            guide.style.display = 'flex';
+        });
+    </script>
+</body>
+</html> 
