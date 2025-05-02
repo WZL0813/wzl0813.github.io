@@ -1,0 +1,33 @@
+[
+  {
+    "icon": "Compass",
+    "name": "起始页",
+    "link": "https://wzl0813.github.io/"
+  },
+  {
+    "icon": "Book",
+    "name": "介绍",
+    "link": "https://wzl0813.github.io/WZL.html"
+  },
+  {
+    "icon": "CompactDisc",
+    "name": "更多",
+    "link": "https://wzl0813.github.io/More.html"
+  },
+  {
+    "icon": "Fire",
+    "name": "学校食谱",
+    "link": "https://wzl0813.github.io/XueXiaoShiPu.html"
+  },
+
+  {
+    "icon": "Blog",
+    "name": "简单",
+    "link": "https://wzl0813.github.io/index-newold.html"
+  },
+  {
+    "icon": "LaptopCode",
+    "name": "GitHub",
+    "link": "https://github.com/WZL0813"
+  }
+]
