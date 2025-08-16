@@ -7,11 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoBackground = document.querySelector('.video-background video');
     const musicBtn = document.getElementById('musicBtn');
     const shareBtn = document.getElementById('shareBtn');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navList = document.querySelector('.nav-list');
     
     let currentSection = 'home';
     let isAnimating = false;
     let isMusicPlaying = false;
     let audio = null;
+    let isMobileMenuOpen = false;
     
 
     const homeSection = document.querySelector('#home');
@@ -31,7 +34,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetSection = this.getAttribute('data-section');
             console.log('导航点击:', targetSection);
             navigateToSection(targetSection);
+            
+            // 移动端点击后关闭菜单
+            if (window.innerWidth <= 768) {
+                closeMobileMenu();
+            }
         });
+        
+        // 确保移动端菜单中的链接也能正常工作
+        const link = item.querySelector('a');
+        if (link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetSection = item.getAttribute('data-section');
+                console.log('移动端导航点击:', targetSection);
+                navigateToSection(targetSection);
+                closeMobileMenu();
+            });
+        }
     });
     
 
@@ -43,6 +63,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (shareBtn) {
         shareBtn.addEventListener('click', shareWebsite);
     }
+    
+    // 移动端菜单按钮事件
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    }
+    
+    // 点击外部关闭移动端菜单
+    document.addEventListener('click', function(e) {
+        if (isMobileMenuOpen && !mobileMenuBtn.contains(e.target) && !navList.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
     
 
     let scrollTimeout;
@@ -89,6 +121,29 @@ document.addEventListener('DOMContentLoaded', function() {
         initParticles();
     }
     
+    // 移动端菜单控制函数
+    function toggleMobileMenu() {
+        if (isMobileMenuOpen) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    }
+    
+    function openMobileMenu() {
+        isMobileMenuOpen = true;
+        mobileMenuBtn.classList.add('active');
+        navList.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMobileMenu() {
+        isMobileMenuOpen = false;
+        mobileMenuBtn.classList.remove('active');
+        navList.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
 
     function initAudio() {
 
@@ -113,7 +168,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const particlesContainer = document.getElementById('particlesBg');
         if (!particlesContainer) return;
         
-        const particleCount = 50;
+        // 根据设备性能调整粒子数量
+        const isMobile = window.innerWidth <= 768;
+        const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        
+        let particleCount = 50;
+        if (isMobile) {
+            particleCount = 15; // 移动端减少粒子数量
+        } else if (isLowEndDevice) {
+            particleCount = 25; // 低端设备减少粒子数量
+        }
+        
+        // 如果用户偏好减少动画，则不显示粒子
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            particleCount = 0;
+        }
         
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
@@ -132,6 +201,11 @@ document.addEventListener('DOMContentLoaded', function() {
             particle.style.height = size + 'px';
             
             particlesContainer.appendChild(particle);
+        }
+        
+        // 性能监控
+        if (particleCount > 0) {
+            console.log(`粒子系统初始化完成，粒子数量: ${particleCount}`);
         }
     }
     
@@ -294,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     function getSectionIndex(sectionId) {
-        const sectionOrder = ['home', 'about', 'characters', 'download'];
+        const sectionOrder = ['home', 'about', 'web', 'other'];
         return sectionOrder.indexOf(sectionId);
     }
     
@@ -338,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     function navigateToNextSection() {
-        const sectionOrder = ['home', 'about', 'characters', 'download'];
+        const sectionOrder = ['home', 'about', 'web', 'other'];
         const currentIndex = sectionOrder.indexOf(currentSection);
         const nextIndex = (currentIndex + 1) % sectionOrder.length;
         navigateToSection(sectionOrder[nextIndex]);
@@ -346,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     function navigateToPreviousSection() {
-        const sectionOrder = ['home', 'about', 'characters', 'download'];
+        const sectionOrder = ['home', 'about', 'web', 'other'];
         const currentIndex = sectionOrder.indexOf(currentSection);
         const prevIndex = currentIndex === 0 ? sectionOrder.length - 1 : currentIndex - 1;
         navigateToSection(sectionOrder[prevIndex]);
@@ -423,26 +497,39 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
 
+    // 优化鼠标移动事件，减少触发频率
+    let mouseMoveTimeout;
     document.addEventListener('mousemove', function(e) {
-        const mouseX = e.clientX / window.innerWidth;
-        const mouseY = e.clientY / window.innerHeight;
-        
+        clearTimeout(mouseMoveTimeout);
+        mouseMoveTimeout = setTimeout(() => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
 
-        if (videoBackground) {
-            const translateX = (mouseX - 0.5) * 20;
-            const translateY = (mouseY - 0.5) * 20;
-            videoBackground.style.transform = `translate(${translateX}px, ${translateY}px)`;
-        }
+            if (videoBackground) {
+                const translateX = (mouseX - 0.5) * 20;
+                const translateY = (mouseY - 0.5) * 20;
+                videoBackground.style.transform = `translate(${translateX}px, ${translateY}px)`;
+            }
+        }, 16); // 约60fps的更新频率
     });
 
+    // 优化滚动事件，使用requestAnimationFrame提高性能
+    let scrollAnimationId;
     window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const parallax = scrolled * 0.5;
-        
-
-        if (videoBackground) {
-            videoBackground.style.transform = `translateY(${parallax}px)`;
+        if (scrollAnimationId) {
+            cancelAnimationFrame(scrollAnimationId);
         }
+        
+        scrollAnimationId = requestAnimationFrame(() => {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.5;
+            
+
+            if (videoBackground) {
+                videoBackground.style.transform = `translateY(${parallax}px)`;
+            }
+        });
     });
     
 
@@ -465,4 +552,85 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    
+    // 性能检测和自动优化
+    function checkPerformance() {
+        // 检测设备性能
+        const startTime = performance.now();
+        
+        // 简单的性能测试
+        let testResult = 0;
+        for (let i = 0; i < 1000000; i++) {
+            testResult += Math.random();
+        }
+        
+        const endTime = performance.now();
+        const performanceScore = endTime - startTime;
+        
+        console.log(`性能测试结果: ${performanceScore.toFixed(2)}ms`);
+        
+        // 根据性能自动调整设置
+        if (performanceScore > 100) {
+            // 低性能设备，进一步减少动画
+            console.log('检测到低性能设备，启用性能优化模式');
+            enablePerformanceMode();
+        }
+    }
+    
+    function enablePerformanceMode() {
+        // 减少CSS动画复杂度
+        const style = document.createElement('style');
+        style.textContent = `
+            * {
+                animation-duration: 0.5s !important;
+                transition-duration: 0.3s !important;
+            }
+            .particle {
+                display: none !important;
+            }
+            body::before {
+                animation: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 移除所有粒子
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach(particle => particle.remove());
+        
+        console.log('性能优化模式已启用');
+    }
+    
+    // 页面加载完成后进行性能检测
+    window.addEventListener('load', function() {
+        setTimeout(checkPerformance, 2000);
+    });
+    
+    // 监听设备方向变化，重新初始化粒子系统
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            // 清除现有粒子
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(particle => particle.remove());
+            
+            // 重新初始化粒子系统
+            initParticles();
+        }, 500);
+    });
+    
+    // 监听窗口大小变化，优化移动端体验
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth <= 768 && isMobileMenuOpen) {
+                closeMobileMenu();
+            }
+            
+            // 重新初始化粒子系统以适应新尺寸
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(particle => particle.remove());
+            initParticles();
+        }, 300);
+    });
 });

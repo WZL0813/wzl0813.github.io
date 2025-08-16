@@ -155,7 +155,7 @@ body::before {
     border-bottom: 1px solid rgba(66, 133, 244, 0.3);
     z-index: 1000;
     transition: all 0.4s ease;
-    box-shadow: 0 4px 30px rgba(52, 168, 83, 0.6));
+    box-shadow: 0 4px 30px rgba(52, 168, 83, 0.6);
 }
 
 .fixed-header::before {
@@ -219,11 +219,12 @@ body::before {
 }
 
 /* 导航菜单 */
-.top-navigation {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-}
+    .top-navigation {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        position: relative;
+    }
 
 .nav-list {
     display: flex;
@@ -244,7 +245,7 @@ body::before {
     border-radius: 25px;
     transition: all 0.4s ease;
     position: relative;
-    background: rgba(52, 168, 83, 0.6));
+    background: rgba(52, 168, 83, 0.6);
     border: 1px solid transparent;
 }
 
@@ -988,7 +989,59 @@ body::before {
     }
 }
 
-/* 响应式设计 */
+/* 中等屏幕响应式设计 */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 0 20px;
+        height: 75px;
+    }
+    
+    .nav-list {
+        gap: 25px;
+    }
+    
+    .nav-item a {
+        font-size: 15px;
+        padding: 11px 18px;
+    }
+    
+    .nav-actions {
+        gap: 18px;
+    }
+    
+    .nav-btn {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* 小屏幕响应式设计 */
+@media (max-width: 900px) {
+    .header-container {
+        padding: 0 18px;
+        height: 72px;
+    }
+    
+    .nav-list {
+        gap: 22px;
+    }
+    
+    .nav-item a {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+    
+    .nav-actions {
+        gap: 16px;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* 小屏幕响应式设计 */
 @media (max-width: 768px) {
     .header-container {
         padding: 0 15px;
@@ -1019,12 +1072,21 @@ body::before {
     }
     
     .nav-btn {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
+        background: rgba(255, 255, 255, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        flex-shrink: 0; /* 防止按钮被压缩 */
     }
     
     .nav-btn .btn-icon {
         font-size: 18px;
+    }
+    
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.35);
+        transform: scale(1.05);
     }
     
     .hero-title {
@@ -1102,7 +1164,7 @@ body::before {
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(52, 168, 83, 0.6));
+    background: rgba(52, 168, 83, 0.6);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -1180,7 +1242,7 @@ body::before {
 .progress-bar {
     width: 350px;
     height: 6px;
-    background: rgba(52, 168, 83, 0.6));
+    background: rgba(52, 168, 83, 0.6);
     border-radius: 3px;
     overflow: hidden;
     margin-bottom: 30px;
@@ -1247,5 +1309,312 @@ body::before {
     40% {
         transform: scale(1.2) rotate(10deg);
         opacity: 1;
+    }
+}
+
+/* 移动端汉堡菜单按钮 */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.mobile-menu-btn span {
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* 性能优化 - 减少动画复杂度 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex;
+        order: -1; /* 让汉堡菜单按钮在最左侧 */
+        margin-right: auto; /* 推送到最左侧 */
+    }
+    
+    .top-navigation {
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .nav-list {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 250px;
+        background: linear-gradient(135deg, 
+            rgba(52, 168, 83, 0.95) 0%, 
+            rgba(26, 26, 46, 0.95) 50%, 
+            rgba(15, 52, 96, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch; /* 改为stretch让子元素填满宽度 */
+        padding: 20px 0;
+        margin: 0;
+        list-style: none;
+        overflow: hidden;
+    }
+    
+    .nav-list.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .nav-item {
+        margin: 10px 0;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+    }
+    
+    .nav-item a {
+        font-size: 16px;
+        padding: 12px 20px;
+        display: block;
+        width: calc(100% - 30px); /* 减去左右边距 */
+        box-sizing: border-box;
+        text-decoration: none;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        margin: 0 15px;
+        transition: all 0.3s ease;
+        text-align: center; /* 确保文字居中 */
+    }
+    
+    .nav-item a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .nav-actions {
+        position: fixed;
+        bottom: -100px;
+        right: 20px;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 999999; /* 最高层级，确保在最上层 */
+        display: flex !important; /* 强制显示 */
+        background: rgba(0, 0, 0, 0.6); /* 更明显的背景 */
+        padding: 15px; /* 增加内边距 */
+        border-radius: 25px; /* 更大的圆角 */
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.3); /* 更明显的边框 */
+        min-height: 150px; /* 增加高度确保3个按钮都能显示 */
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* 更明显的阴影 */
+        pointer-events: auto; /* 确保可以点击 */
+        isolation: isolate;
+        /* 确保按钮容器不被其他元素遮挡 */
+        transform: none !important; /* 防止被其他CSS影响 */
+        opacity: 1 !important; /* 强制显示 */
+        visibility: visible !important; /* 强制可见 */
+    }
+    
+    /* 移动端按钮样式 - 确保所有按钮都能显示 */
+    .nav-btn {
+        width: 42px !important; /* 强制宽度 */
+        height: 42px !important; /* 强制高度 */
+        background: rgba(255, 255, 255, 0.4) !important; /* 更明显的背景 */
+        border: 2px solid rgba(255, 255, 255, 0.6) !important; /* 更明显的边框 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important; /* 更明显的阴影 */
+        flex-shrink: 0;
+        display: flex !important; /* 强制显示 */
+        opacity: 1 !important; /* 强制可见 */
+        visibility: visible !important; /* 强制可见 */
+        transform: none !important; /* 防止被其他CSS影响 */
+        position: relative !important; /* 确保定位正确 */
+        z-index: 999999 !important; /* 最高层级 */
+        margin: 0 !important; /* 清除边距 */
+        padding: 0 !important; /* 清除内边距 */
+    }
+    
+    .nav-btn .btn-icon {
+        font-size: 20px !important; /* 强制图标大小 */
+        color: #fff !important; /* 强制图标颜色 */
+        display: block !important; /* 强制显示 */
+        opacity: 1 !important; /* 强制可见 */
+    }
+    
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.6) !important; /* 悬停效果 */
+        transform: scale(1.1) !important; /* 悬停缩放 */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important; /* 悬停阴影 */
+    }
+    
+    .header-container {
+        padding: 0 15px;
+        height: 70px;
+    }
+    
+    .logo img {
+        height: 35px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .web-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+    
+    .footer {
+        padding: 30px 0;
+    }
+    
+    .footer-content {
+        padding: 0 15px;
+    }
+    
+    .loading-screen img {
+        width: 100px;
+    }
+    
+    .progress-bar {
+        width: 280px;
+        height: 5px;
+    }
+    
+    .loading-text {
+        font-size: 24px;
+    }
+    
+    /* 移动端减少粒子数量 */
+    .particle {
+        display: none;
+    }
+    
+    /* 移动端简化背景动画 */
+    body::before {
+        animation: none;
+    }
+    
+    /* 移动端减少模糊效果 */
+    .fixed-header {
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 480px) {
+    .header-container {
+        padding: 0 10px;
+        height: 60px;
+    }
+    
+    .logo img {
+        height: 30px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .nav-list {
+        width: 200px;
+    }
+    
+    .nav-actions {
+        bottom: -75px;
+        right: 15px;
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .nav-btn {
+        width: 35px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .nav-btn .btn-icon {
+        font-size: 16px;
+    }
+    
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
     }
 }
