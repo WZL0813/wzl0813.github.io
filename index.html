@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryokuryuneko官方网站 | 喵！新的开始！一切奇迹的起点！</title>
+    <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/toba.css">
+</head>
+<body>
+
+    <div class="loading-screen">
+        <img src="images/wait.gif" alt="Loading...">
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="loading-text">
+            <span style="--i:0">L</span>
+            <span style="--i:1">O</span>
+            <span style="--i:2">A</span>
+            <span style="--i:3">D</span>
+            <span style="--i:4">I</span>
+            <span style="--i:5">N</span>
+            <span style="--i:6">G</span>
+            <span style="--i:7">.</span>
+            <span style="--i:8">.</span>
+            <span style="--i:9">.</span>
+        </div>
+    </div>
+
+    <!-- 视频背景 （暂时弃用）-->
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source src="" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <!-- 粒子背景效果 -->
+    <div class="particles-bg" id="particlesBg"></div>
+
+    <!-- 顶部导航栏 -->
+    <header class="fixed-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="https://Ryokuryuneko.top/">
+                    <img src="images/logo.png" alt="Ryokuryuneko Logo">
+            </div>
+            <nav class="top-navigation">
+                <ul class="nav-list">
+                    <li class="nav-item active" data-section="home">
+                        <a href="#home">首页</a>
+                    </li>
+                    <li class="nav-item" data-section="about">
+                        <a href="#about">简介</a>
+                    </li>
+                    <li class="nav-item" data-section="web">
+                        <a href="#web">网址</a>
+                    </li>
+                    <li class="nav-item" data-section="other">
+                        <a href="#other">其他</a>
+                    </li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="nav-btn music-btn" id="musicBtn">
+                        <span class="btn-icon">🎵</span>
+                    </button>
+                    <a href="https://github.com/WZL0813" class="nav-btn account-btn" target="_blank">
+                        <span class="btn-icon">👤</span>
+                    </a>
+                    <button class="nav-btn share-btn" id="shareBtn">
+                        <span class="btn-icon">📤</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <section id="home" class="page-section active hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Ryokuryuneko</h1>
+                <h2 class="hero-subtitle">WZL</h2>
+                <p class="hero-description">喵！新的开始！一切奇迹的起点！</p>
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary">关于</a>
+                    <a href="#web" class="btn btn-secondary">网址</a>
+                </div>
+            </div>
+        </section>
+        <section id="about" class="page-section">
+            <div class="section-content">
+                <h2 class="section-title">简介</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"></div>
+                        <img src=".\images\t.png" width="256" height="256" alt="Ryokuryuneko">
+                        <h3>Ryokuryuneko<h3>
+                        <p>游戏名统一WZL0813</p>
+                        <p>昵称统一Ryokuryuneko</p>
+                        <p>有事加2411273874</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="web" class="page-section">
+            <div class="section-content">
+                <h2 class="section-title">网址</h2>
+                <div class="web-grid">
+                    <div class="character-card">
+                        <div class="character-image">
+                        </div>
+                        <h3>学校食谱</h3>
+                        <p><a href="https://ryokuryuneko.top/XueXiaoShiPu.html">学校食谱选择界面</a></p>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-image">
+                        </div>
+                        <h3>RyokuryunekoSMP</h3>
+                        <p>Minecraft服务器，具体介绍看官网</p>
+                        <p><a href="https://ryokuryuneko.top/RyokuryunekoSMP/">官网</a></p>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-image">
+                        </div>
+                        <h3>Other</h3>
+                        <p>其他的其他</p>
+                        <p><a href="https://other.ryokuryuneko.top/">前往</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="other" class="page-section">
+            <div class="section-content">
+                <h2 class="section-title">其他</h2>
+                <p class="other-description">自己是一只猫猫 躺平了喵</p>
+                <p>    　　       　∧,,　</p>
+                <p>    　　　　ヾ ｀. ､`フ</p>
+                <p>    　　　(,｀'´ヽ､､ﾂﾞ</p>
+                <p>    　 (ヽｖ'　　　`''ﾞつ</p>
+                <p>    　　,ゝ　 ⌒`ｙ'''´</p>
+                <p>    　 （ (´＾ヽこつ</p>
+                <p>     　　 ) )</p>
+                <p>    　　(ノ</p>
+                <div class="other-buttons">
+                    <a href="https://space.bilibili.com/1948701915/" class="btn btn-other">
+                        <span class="btn-icon">📱</span>
+                        <span class="btn-text">
+                            <span class="btn-title">Bilibili</span>
+                            <span class="btn-subtitle">Ryokuryuneko</span>
+                        </span>
+                    </a>
+                    <a href="https://github.com/WZL0813/" class="btn btn-other">
+                        <span class="btn-icon">🐱</span>
+                        <span class="btn-text">
+                            <span class="btn-title">GitHub</span>
+                            <span class="btn-subtitle">Ryokuryuneko</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部栏 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Make by <strong>WZL</strong>0813(Ryokuryuneko)</p>
+            <p>All Rights Reserved</p>
+            <p>Design: WZL(Ryokuryuneko)</p>
+            <p>&copy; Ryokuryuneko ∞</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/toba.js"></script>
+</body>
+</html>
