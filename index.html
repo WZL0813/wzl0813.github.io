@@ -20,6 +20,13 @@
             pointer-events: none; /* 防止文字影响页面交互 */
             animation: glow 2 ease-in-out infinite alternate;
         }
+
+        @media (max-width: 1200px) {
+                        .video-preview iframe {
+                            width: 100%;
+                            height: calc(100vw * 0.5);
+                        }
+                    }
     </style>
 
     <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon">
