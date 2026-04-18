@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryokuryuneko | 喵！新的开始！一切奇迹的起点！</title>
+    <title>Ryokuryuneko|喵！新的开始！一切奇迹的起点！</title>
     <script src="assets/tailwindcss.js"></script>
     <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     
@@ -44,38 +44,10 @@
                 transform: translateY(-5px);
             }
             .page-section {
-                position: absolute;
-                top: 0;
-                left: 0;
+                display: block;
                 width: 100%;
-                opacity: 0;
-                pointer-events: none;
-                visibility: hidden;
-                display: flex;
-                align-items: flex-start;
-                justify-content: center;
                 min-height: calc(100vh - 80px);
                 padding: 2rem 0;
-                overflow-y: auto;
-            }
-            .page-section.from-left {
-                transform: translateX(-100%) rotate(-5deg) scale(0.9);
-            }
-            .page-section.from-right {
-                transform: translateX(100%) rotate(5deg) scale(0.9);
-            }
-            .page-section.from-top {
-                transform: translateY(-100%) scale(0.9) rotate(-3deg);
-            }
-            .page-section.from-bottom {
-                transform: translateY(100%) scale(0.9) rotate(3deg);
-            }
-            .page-section.active {
-                opacity: 1;
-                transform: translateX(0) translateY(0) rotate(0) scale(1);
-                pointer-events: auto;
-                visibility: visible;
-                transition: opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             }
             .nav-link {
                 position: relative;
@@ -118,17 +90,9 @@
             position: relative;
             z-index: 1;
             min-height: calc(100vh - 80px);
-        }
-        .cat-art {
-            font-family: monospace;
-            white-space: pre;
-            line-height: 1.2;
-            text-align: center;
+            padding-bottom: 100px;
         }
         @media (max-width: 640px) {
-            .cat-art {
-                font-size: 12px;
-            }
             body {
                 padding-top: 70px;
             }
@@ -213,11 +177,14 @@
             0%, 100% { transform: scale(1); opacity: 0.5; }
             50% { transform: scale(1.2); opacity: 0.8; }
         }
+        
+
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
     <canvas id="snow-canvas"></canvas>
-    <header class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-md z-50 h-20">
+    
+<header class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-md z-50 h-20">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex items-center justify-between h-full">
                 <div class="flex items-center">
@@ -227,10 +194,8 @@
                 </div>
                 
                 <nav class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                    <a href="#" class="nav-link active text-gray-700 dark:text-gray-200 font-medium text-sm lg:text-base" data-section="home">首页</a>
-                    <a href="#" class="nav-link text-gray-700 dark:text-gray-200 font-medium text-sm lg:text-base" data-section="about">简介</a>
-                    <a href="#" class="nav-link text-gray-700 dark:text-gray-200 font-medium text-sm lg:text-base" data-section="websites">网址</a>
-                    <a href="#" class="nav-link text-gray-700 dark:text-gray-200 font-medium text-sm lg:text-base" data-section="other">其他</a>
+                    <a href="https://ryokuryuneko.top/" class="nav-link text-gray-700 dark:text-gray-200 font-medium text-sm lg:text-base">主页</a>
+                    <a href="https://ryokuryuneko.top/webs.html" class="nav-link text-gray-700 dark:text-gray-200 font-medium text-sm lg:text-base">网址</a>
                 </nav>
                 
                 <div class="flex items-center gap-2">
@@ -252,52 +217,15 @@
         <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div class="container mx-auto px-4 py-4">
                 <nav class="flex flex-col space-y-4">
-                    <a href="#" class="nav-link active text-gray-700 dark:text-gray-200 font-medium py-2" data-section="home">首页</a>
-                    <a href="#" class="nav-link text-gray-700 dark:text-gray-200 font-medium py-2" data-section="about">简介</a>
-                    <a href="#" class="nav-link text-gray-700 dark:text-gray-200 font-medium py-2" data-section="websites">网址</a>
-                    <a href="#" class="nav-link text-gray-700 dark:text-gray-200 font-medium py-2" data-section="other">其他</a>
+                    <a href="https://ryokuryuneko.top/" class="nav-link text-gray-700 dark:text-gray-200 font-medium py-2">主页</a>
+                    <a href="https://ryokuryuneko.top/webs.html" class="nav-link text-gray-700 dark:text-gray-200 font-medium py-2">网址</a>
                 </nav>
             </div>
         </div>
     </header>
 
     <main class="main-content">
-        <section id="home" class="page-section active">
-            <div class="hero-content text-center px-4 py-16">
-                <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">Ryokuryuneko</h1>
-                <h2 class="hero-subtitle text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700 dark:text-gray-200 mb-6">WZL</h2>
-                <p class="hero-description text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">喵！新的开始！一切奇迹的起点！</p>
-                <div class="hero-buttons flex flex-wrap justify-center gap-4">
-                    <a href="#" class="btn btn-primary bg-gradient-to-r from-primary to-secondary text-white px-6 sm:px-8 py-3 rounded-full font-medium hover:shadow-lg transition-all transform hover:scale-105" data-section="websites">
-                        开始探索
-                    </a>
-                    <a href="#" class="btn btn-secondary border-2 border-primary text-primary px-6 sm:px-8 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition-all" data-section="about">
-                        了解更多
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="page-section">
-            <div class="section-content container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-                <h2 class="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-8 sm:mb-12">简介</h2>
-                <div class="features-grid max-w-4xl mx-auto">
-                    <div class="feature-card bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 card-shadow card-hover text-center">
-                        <div class="feature-icon mb-6">
-                            <img src="images/t.png" width="200" height="200" alt="Ryokuryuneko" class="mx-auto rounded-full border-4 border-primary/20">
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-4">Ryokuryuneko</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-2">游戏名统一WZL0813</p>
-                        <p class="text-gray-600 dark:text-gray-300 mb-2">昵称统一Ryokuryuneko</p>
-                        <p class="text-gray-600 dark:text-gray-300">有事加2411273874</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-
-<section id="websites" class="page-section">
+        <section id="websites" class="page-section active">
             <div class="section-content container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
                 <h2 class="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-8 sm:mb-12">网址</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -306,11 +234,41 @@
                             <i class="fa fa-cloud text-white text-4xl sm:text-5xl"></i>
                         </div>
                         <div class="p-4 sm:p-6">
-                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">云盘</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">AList(OpenList不想修了)</p>
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">RunTime</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">应用使用时长</p>
                             <p>
-                                <a href="https://alist.ryokuryuneko.top/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
-                                    list <i class="fa fa-arrow-right ml-2"></i>
+                                <a href="https://runtime.ryokuryuneko.top/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    前往 <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
+                        <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                            <i class="fa fa-cloud text-white text-4xl sm:text-5xl"></i>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">DongXin</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">氢心·心率广播</p>
+                            <p>
+                                <a href="https://dongxin.ryokuryuneko.top/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    前往 <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
+                        <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                            <i class="fa fa-cloud text-white text-4xl sm:text-5xl"></i>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">Sleepy</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">似了吗</p>
+                            <p>
+                                <a href="https://sleepy.ryokuryuneko.top/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    前往 <i class="fa fa-arrow-right ml-2"></i>
                                 </a>
                             </p>
                         </div>
@@ -321,11 +279,56 @@
                             <i class="fa fa-cutlery text-white text-4xl sm:text-5xl"></i>
                         </div>
                         <div class="p-4 sm:p-6">
-                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">其他网址</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">其他Ryokuryuneko.top旗下域名附属网址</p>
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">学校食谱</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">学校食谱选择界面</p>
                             <p>
-                                <a href="https://ryokuryuneko.top/webs.html" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                <a href="https://ryokuryuneko.top/XueXiaoShiPu.html" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
                                     前往 <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
+                        <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-red-400 to-orange-500 flex items-center justify-center">
+                            <i class="fa fa-video-camera text-white text-4xl sm:text-5xl"></i>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">视频发布页(学校)</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Video Release Page (School)</p>
+                            <p>
+                                <a href="https://ryokuryuneko.top/SchoolVideoReleasePage.html" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    GO <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
+                        <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-amber-400 to-yellow-500 flex items-center justify-center">
+                            <i class="fa fa-server text-white text-4xl sm:text-5xl"></i>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">RyokuryunekoSMP</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Minecraft服务器，具体介绍看官网</p>
+                            <p>
+                                <a href="https://ryokuryuneko.top/RyokuryunekoSMP/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    官网 <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
+                        <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
+                            <i class="fa fa-music text-white text-4xl sm:text-5xl"></i>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">蔚蓝档案-游戏开发部の天籁之音</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">BA游戏开发部の发癫语录</p>
+                            <p>
+                                <a href="https://ryokuryuneko.top/BlueArchive-GameDevelopmentDepartment-HeavenlyVoice/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    官网 <i class="fa fa-arrow-right ml-2"></i>
                                 </a>
                             </p>
                         </div>
@@ -345,37 +348,6 @@
                             </p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="other" class="page-section">
-            <div class="section-content container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <h2 class="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-8">其他</h2>
-                <p class="other-description text-center text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8">自己是一只猫猫 躺平了喵</p>
-                <div class="cat-art text-gray-700 dark:text-gray-300 mb-8 text-base sm:text-lg">
-　　       　∧,,　
-　　　　ヾ ｀. ､`フ
-　　　(,｀'´ヽ､､ﾂﾞ
-　 (ヽｖ'　　　`''ﾞつ
-　　,ゝ　 ⌒`ｙ'''´
-　 （ (´＾ヽこつ
-　　 ) )
-　　(ノ
-                </div>
-                <div class="other-buttons flex flex-wrap justify-center gap-4 sm:gap-6">
-                    <a href="https://space.bilibili.com/1948701915/" target="_blank" class="btn btn-other bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 sm:px-8 py-4 rounded-xl font-medium hover:shadow-lg transition-all transform hover:scale-105 flex flex-col items-center min-w-[160px] sm:min-w-[180px]">
-                        <span class="btn-text">
-                            <span class="btn-title text-lg sm:text-xl font-bold">Bilibili</span>
-                            <span class="btn-subtitle text-xs sm:text-sm opacity-90">Ryokuryuneko</span>
-                        </span>
-                    </a>
-                    <a href="https://github.com/WZL0813/" target="_blank" class="btn btn-other bg-gradient-to-r from-gray-800 to-gray-900 text-white px-6 sm:px-8 py-4 rounded-xl font-medium hover:shadow-lg transition-all transform hover:scale-105 flex flex-col items-center min-w-[160px] sm:min-w-[180px]">
-                        <span class="btn-text">
-                            <span class="btn-title text-lg sm:text-xl font-bold">GitHub</span>
-                            <span class="btn-subtitle text-xs sm:text-sm opacity-90">Ryokuryuneko</span>
-                        </span>
-                    </a>
                 </div>
             </div>
         </section>
@@ -554,115 +526,25 @@
         });
 
         const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.page-section');
-        const footer = document.getElementById('footer');
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const shareBtn = document.getElementById('shareBtn');
-        let currentSection = 'home';
-        let isAnimating = false;
-        let lastScrollTime = 0;
-        const scrollThreshold = 100;
-        const touchScrollThreshold = 150;
+        const footer = document.getElementById('footer');
+        let lastScrollY = 0;
 
-        const sectionOrder = ['home', 'about', 'websites', 'other'];
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
 
-        function getNextSection(current) {
-            const currentIndex = sectionOrder.indexOf(current);
-            if (currentIndex < sectionOrder.length - 1) {
-                return sectionOrder[currentIndex + 1];
-            }
-            return current;
-        }
-
-        function getPrevSection(current) {
-            const currentIndex = sectionOrder.indexOf(current);
-            if (currentIndex > 0) {
-                return sectionOrder[currentIndex - 1];
-            }
-            return current;
-        }
-
-        function switchSection(sectionId) {
-            if (isAnimating) return;
-            isAnimating = true;
-            
-            window.scrollTo({ top: 0, behavior: 'instant' });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.dataset.section === sectionId) {
-                    link.classList.add('active');
-                }
-            });
-            
-            const currentIndex = sectionOrder.indexOf(currentSection);
-            const targetIndex = sectionOrder.indexOf(sectionId);
-            const targetSection = document.getElementById(sectionId);
-            
-            if (targetSection) {
-                sections.forEach(section => {
-                    section.classList.remove('active', 'from-left', 'from-right', 'from-top', 'from-bottom');
-                });
-                
-                const directions = ['from-left', 'from-right', 'from-top', 'from-bottom'];
-                const randomDir = directions[Math.floor(Math.random() * directions.length)];
-                
-                if (targetIndex > currentIndex) {
-                    targetSection.classList.add('from-bottom');
-                } else if (targetIndex < currentIndex) {
-                    targetSection.classList.add('from-top');
-                } else {
-                    targetSection.classList.add(randomDir);
-                }
-                
-                requestAnimationFrame(() => {
-                    targetSection.classList.add('active');
-                });
-                
-                setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'instant' });
-                    isAnimating = false;
-                }, 800);
-            }
-            
-            currentSection = sectionId;
-            updateFooterVisibility();
-            
-            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('hidden');
-            }
-        }
-
-        function updateFooterVisibility() {
-            if (currentSection === 'other') {
+            if (isAtBottom) {
                 footer.classList.remove('translate-y-full', 'opacity-0');
                 footer.classList.add('translate-y-0', 'opacity-100');
             } else {
                 footer.classList.remove('translate-y-0', 'opacity-100');
                 footer.classList.add('translate-y-full', 'opacity-0');
             }
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = link.dataset.section;
-                if (sectionId) {
-                    switchSection(sectionId);
-                }
-            });
-        });
-
-        const heroButtons = document.querySelectorAll('.hero-buttons .btn[data-section]');
-        heroButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = btn.dataset.section;
-                if (sectionId) {
-                    switchSection(sectionId);
-                }
-            });
         });
 
         if (mobileMenuBtn) {
@@ -689,74 +571,7 @@
             });
         }
 
-        document.addEventListener('wheel', (e) => {
-            const now = Date.now();
-            if (now - lastScrollTime < 600) return;
-            
-            const currentActiveSection = document.querySelector('.page-section.active');
-            if (currentActiveSection) {
-                const canScroll = currentActiveSection.scrollHeight > currentActiveSection.clientHeight;
-                const atTop = currentActiveSection.scrollTop <= 5;
-                const atBottom = currentActiveSection.scrollTop + currentActiveSection.clientHeight >= currentActiveSection.scrollHeight - 5;
-                
-                if (e.deltaY > 0) {
-                    if (canScroll && !atBottom) {
-                        return;
-                    }
-                    const next = getNextSection(currentSection);
-                    if (next !== currentSection) {
-                        e.preventDefault();
-                        switchSection(next);
-                        lastScrollTime = now;
-                    }
-                } else if (e.deltaY < 0) {
-                    if (canScroll && !atTop) {
-                        return;
-                    }
-                    const prev = getPrevSection(currentSection);
-                    if (prev !== currentSection) {
-                        e.preventDefault();
-                        switchSection(prev);
-                        lastScrollTime = now;
-                    }
-                }
-            }
-        }, { passive: false });
-
-        let touchStartY = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY - touchEndY;
-            const now = Date.now();
-            
-            if (now - lastScrollTime < 600) return;
-            
-            if (Math.abs(diff) < touchScrollThreshold) {
-                return;
-            }
-            
-            if (diff > 0) {
-                const next = getNextSection(currentSection);
-                if (next !== currentSection) {
-                    switchSection(next);
-                    lastScrollTime = now;
-                }
-            } else if (diff < 0) {
-                const prev = getPrevSection(currentSection);
-                if (prev !== currentSection) {
-                    switchSection(prev);
-                    lastScrollTime = now;
-                }
-            }
-        }, { passive: true });
-
         document.addEventListener('DOMContentLoaded', () => {
-            updateFooterVisibility();
-            
             const cards = document.querySelectorAll('.character-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
