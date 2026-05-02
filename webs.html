@@ -116,7 +116,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3 ease;
         }
         
         .theme-toggle:hover {
@@ -133,12 +133,12 @@
             display: inline-block;
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3 ease;
         }
         
         .logo-wrapper:hover {
             transform: scale(1.1) rotate(5deg);
-            animation: logoBounce 0.5s ease infinite alternate;
+            animation: logoBounce 0.5 ease infinite alternate;
         }
         
         .logo-wrapper::before {
@@ -151,17 +151,17 @@
             background: radial-gradient(circle, rgba(129, 216, 208, 0.3) 0%, transparent 70%);
             border-radius: 50%;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3 ease;
             z-index: -1;
         }
         
         .logo-wrapper:hover::before {
             opacity: 1;
-            animation: pulse 1s ease infinite;
+            animation: pulse 1 ease infinite;
         }
         
         .logo-img {
-            transition: transform 0.3s ease, filter 0.3s ease;
+            transition: transform 0.3 ease, filter 0.3 ease;
         }
         
         .logo-wrapper:hover .logo-img {
@@ -229,6 +229,23 @@
             <div class="section-content container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
                 <h2 class="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-white mb-8 sm:mb-12">网址</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+
+                    <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
+                        <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                            <i class="fa fa-cloud text-white text-4xl sm:text-5xl"></i>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">新页面</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">WordPass</p>
+                            <p>
+                                <a href="https://dongxin.ryokuryuneko.top/" class="inline-flex items-center text-primary hover:text-secondary transition-colors">
+                                    前往 <i class="fa fa-arrow-right ml-2"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="character-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden card-shadow card-hover">
                         <div class="character-image h-40 sm:h-48 bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
                             <i class="fa fa-cloud text-white text-4xl sm:text-5xl"></i>
