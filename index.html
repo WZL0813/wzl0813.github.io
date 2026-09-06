@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Ryokuryuneko · 探索未至之境</title>
+    <meta name="description" content="ryokuryuneko.top：一只躺在星空里的猫。游戏名 WZL0813，昵称 Ryokuryuneko，博客、WordPass 与旗下各域的起点。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='1.4' d='M12 21 C7.5 21 5 19 4.8 14.5 C4.6 11 4.8 8 5.5 5.5 L4 1.2 L7.5 4.5 C9 3.4 15 3.4 16.5 4.5 L20 1.2 L18.5 5.5 C19 8 19.4 11 19.2 14.5 C19 19 16.5 21 12 21'/%3E%3C/svg%3E" />
+    <style>
+      /* ── openai-astra tokens (design-systems/openai-astra/tokens.css) ── */
+      :root {
+        --bg: #000000; --surface: #1f1f1f; --surface-warm: #0a0a0a;
+        --fg: #ffffff; --fg-2: #fafafa; --muted: #ffffff99; --meta: #ffffff70;
+        --border: #ffffff33; --border-soft: #ffffff14;
+        --accent: #ffffff; --accent-on: #000000; --accent-hover: #ffffffe6; --accent-active: #ffffffcc;
+        --font-display: "OpenAI Sans", "Inter", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        --font-body: "OpenAI Sans", "Inter", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        --font-mono: "SF Mono", Consolas, "Liberation Mono", ui-monospace, monospace;
+        --text-xs: 13px; --text-sm: 14px; --text-base: 17px; --text-lg: 18px; --text-xl: 22px;
+        --text-2xl: 30px; --text-3xl: 48px; --text-4xl: 64px;
+        --leading-body: 1.65; --leading-tight: 1.08; --tracking-display: -0.03em;
+        --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+        --space-6: 24px; --space-8: 32px; --space-12: 48px;
+        --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 9999px;
+        --elev-flat: none; --elev-ring: 0 0 0 1px var(--border); --elev-raised: 0 18px 60px rgba(0, 0, 0, 0.08); --focus-ring: 0 0 0 2px #ffffffb3;
+        --motion-fast: 150ms; --motion-base: 300ms; --ease-standard: cubic-bezier(0.6, 0, 0.4, 1);
+        --container-max: 1088px; --container-gutter-desktop: 56px; --container-gutter-tablet: 32px; --container-gutter-phone: 20px;
+
+        /* Astra extension values (DESIGN.md §2, §7) */
+        --astra-ambient-color: #23435f;
+        --astra-ambient-opacity: 0.55;
+        --astra-glass: #ffffff1f;
+        --astra-glass-hover: #ffffff33;
+        --astra-copy-max: 669px;
+        --astra-shape-max-width: 576px;
+        --astra-viewport-height: 100svh;
+        --astra-copy-opacity: 1;
+        --astra-title-parallax-y: 0px;
+        --astra-label-duration: 1s;
+        --astra-label-ease: cubic-bezier(0.22, 1, 0.36, 1);
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--bg); color: var(--fg); font: 400 var(--text-base) / var(--leading-body) var(--font-body); letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
+
+      /* ── Stage: the canvas is fixed; the page scrolls over it ── */
+      .stage { position: fixed; inset: 0; z-index: 0; background: var(--bg); }
+      #astra { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: pan-y pinch-zoom; cursor: grab; }
+      #astra:active { cursor: grabbing; }
+
+      /* ── Hero chrome: bottom-left title stack, scroll hint, replay. Pointer-transparent except the button. ── */
+      .chrome { position: fixed; inset: 0; z-index: 2; height: var(--astra-viewport-height); pointer-events: none; opacity: var(--astra-copy-opacity); }
+      .chrome .hero-stack { position: absolute; left: clamp(20px, 4vw, 56px); bottom: clamp(88px, 12vh, 132px); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); pointer-events: none; }
+      .chrome .hero-kicker { margin: 0; font: 500 var(--text-sm) / 1.4 var(--font-body); letter-spacing: 0.1em; color: var(--meta); }
+      .chrome .hero-big { margin: 0; font: 500 clamp(30px, calc(1.6rem + (100vw - 375px) * 0.018), 50px) / 1.2 var(--font-display); letter-spacing: -0.03em; color: var(--fg); max-width: 26ch; text-wrap: balance; opacity: 0; transform: translateY(16px); animation: hero-fade var(--astra-label-duration) var(--astra-label-ease) 1.2s forwards; }
+      @keyframes hero-fade { to { opacity: 1; transform: translateY(0); } }
+      .chrome .letter { display: inline-block; opacity: 0; transform: translateX(var(--astra-label-shift, 44px)); animation: label-reveal var(--astra-label-duration) var(--astra-label-ease) var(--astra-label-delay, 1s) forwards; }
+      @keyframes label-reveal { to { opacity: 1; transform: translate(0); } }
+      .chrome .scroll-hint { position: absolute; left: 50%; bottom: var(--space-8); margin: 0; transform: translateX(-50%); color: #fafafa99; font-size: var(--text-sm); letter-spacing: 0; }
+      .chrome .replay { position: absolute; right: var(--space-3); bottom: var(--space-3); width: 36px; height: 36px; padding: 0; border: 0; border-radius: var(--radius-pill); background: #ffffff26; color: #ffffffcc; display: grid; place-items: center; font-size: 16px; cursor: pointer; pointer-events: auto; transition: color var(--motion-fast), background-color var(--motion-fast); }
+      .chrome .replay:hover { background: #ffffff40; color: #ffffffe6; }
+      .chrome .replay:focus-visible { outline: 2px solid #ffffffb3; outline-offset: 2px; }
+
+      /* ── Page: content never intercepts the pointer, so the canvas stays draggable ── */
+      .page { position: relative; z-index: 1; pointer-events: none; }
+      .page a, .page button { pointer-events: auto; }
+
+      .hero { height: var(--astra-viewport-height); }
+
+      /* First block after the hero: its position drives tilt + scatter (data-astra-intro). */
+      .copy { max-width: var(--astra-copy-max); margin: 0 auto; padding: 26vh var(--space-6); }
+      .copy h2 { margin: 0 0 var(--space-4); max-width: 1000px; font: 500 var(--text-2xl) / 1.32 var(--font-display); letter-spacing: -0.01em; text-wrap: balance; }
+      .copy.title-stage h2 { font: 500 clamp(32px, calc(2rem + (100vw - 375px) * 0.01502), var(--text-3xl)) / 1.16 var(--font-display); letter-spacing: -0.03em; }
+      .copy p { margin: 0 0 var(--space-6); color: var(--muted); text-wrap: pretty; }
+      .copy p a, .wide p a { color: var(--fg); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+      .copy .lede { font-size: var(--text-lg); color: var(--muted); }
+      .copy.title-stage { padding-top: 30vh; }
+      .copy.title-stage h2 { translate: 0 var(--astra-title-parallax-y); will-change: translate; }
+      .copy.tail { padding-bottom: 50vh; text-align: center; color: var(--meta); }
+      .copy.tail p { color: var(--meta); }
+      .ascii-cat { display: inline-block; margin: 0 0 var(--space-6); font: 400 13px / 1.5 ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--meta); text-align: left; white-space: pre; user-select: none; }
+
+      /* A plain link list for the "栖息地" block: no rows, just stacked links. */
+      .copy .link-list { margin: 0 0 var(--space-6); padding: 0; list-style: none; display: grid; gap: var(--space-3); }
+      .copy .link-list a { display: inline-flex; align-items: center; gap: 0.4em; font-size: var(--text-base); color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--border-soft); padding-bottom: var(--space-2); transition: color 250ms linear; }
+      .copy .link-list a:hover { color: var(--muted); }
+      .copy .link-list small { color: var(--meta); font-size: var(--text-sm); }
+
+      .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+      .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1); min-height: 40px; padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-pill); font: 500 var(--text-sm) / 1 var(--font-body); letter-spacing: 0; white-space: nowrap; text-decoration: none; cursor: pointer; transition: background-color var(--motion-base) var(--ease-standard), color var(--motion-base) var(--ease-standard); }
+      .btn:focus-visible { outline: 2px solid #ffffffb3; outline-offset: 2px; }
+      .btn-primary { background: var(--accent); color: var(--accent-on); }
+      .btn-primary:hover { background: var(--accent-hover); }
+      .btn-glass { background: var(--astra-glass); color: var(--fg); }
+      .btn-glass:hover { background: var(--astra-glass-hover); }
+
+      /* Shape cue: 576px × 80vh. Stars land exactly on the path inside this frame. */
+      .cue { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); padding: 18vh var(--space-6); }
+      .cue-target { width: min(var(--astra-shape-max-width), 100%); height: calc(0.8 * var(--astra-viewport-height)); display: flex; align-items: center; justify-content: center; }
+      .cue-target svg { width: 100%; height: 100%; max-width: 100%; max-height: 100%; opacity: 0; }
+      .caption { margin: 0; font: 500 var(--text-sm) / 1.5 var(--font-body); letter-spacing: 0.08em; color: #fafafad9; }
+      .cue-note { max-width: 440px; margin: 0; text-align: center; font-size: var(--text-sm); line-height: 1.7; color: var(--meta); }
+
+      /* Static fallback (no WebGL or reduced motion): the canvas shows a still star map, cues show their path. */
+      [data-astra-static="true"] .cue-target svg { opacity: 1; color: #fafafa4d; }
+      [data-astra-static="true"] .chrome .letter,
+      [data-astra-static="true"] .chrome .hero-big { opacity: 1; animation: none; transform: none; }
+      [data-astra-static="true"] #astra { cursor: auto; }
+
+      /* ── Site header: fixed, 54px, transparent. Only links and buttons take the pointer; no blur behind it. ── */
+      .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 4; height: 54px; pointer-events: none; }
+      @media (min-width: 1020px) { .site-header { height: 64px; } }
+      .site-header::before { content: ""; position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity 400ms cubic-bezier(0.33, 1, 0.68, 1); }
+      .site-header[data-scrolled="true"]::before { opacity: 1; }
+      .site-header .bar { position: relative; display: flex; align-items: center; gap: var(--space-5); height: 100%; max-width: 1440px; margin: 0 auto; padding: 0 var(--space-6); }
+      @media (min-width: 768px) { .site-header .bar { padding: 0 var(--space-8); } }
+      .site-header a, .site-header button { pointer-events: auto; }
+      .site-header .wordmark { display: inline-flex; align-items: center; height: 17px; font: 500 var(--text-lg) / 1 var(--font-display); letter-spacing: -0.02em; color: var(--fg); text-decoration: none; }
+      .site-header nav { display: flex; align-items: center; align-self: stretch; flex: 1; min-width: 0; }
+      .site-header nav a { display: inline-flex; align-items: center; height: 100%; padding: 0 var(--space-4); font: 500 var(--text-xs) / 1.5 var(--font-body); letter-spacing: 0; color: var(--fg); text-decoration: none; transition: color var(--motion-fast); }
+      .site-header nav a:hover { color: var(--muted); }
+      .site-header .nav-actions { display: flex; align-items: center; gap: var(--space-2); }
+      .site-header .search { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--muted); cursor: pointer; transition: background-color 200ms linear; }
+      .site-header .search:hover { background: var(--astra-glass); }
+      .site-header .btn { height: 36px; min-height: 0; padding: 0 20px; gap: 0.3em; }
+      .site-header .btn svg { width: 12px; height: 12px; }
+      @media (max-width: 720px) { .site-header nav, .site-header .btn-glass { display: none; } }
+
+      /* ── Footer: link groups at 13px / 500, bottom bar. The canvas keeps running behind it. ── */
+      .site-footer { position: relative; margin: 0; padding: calc(120px + var(--space-12)) 0 var(--space-8); background: var(--bg); font: 500 var(--text-xs) / 1.5 var(--font-body); letter-spacing: 0; }
+      .footer-inner { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--space-6); }
+      .footer-columns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-8); margin-bottom: var(--space-12); }
+      .footer-group h4 { margin: 0 0 var(--space-4); font: inherit; color: var(--muted); }
+      .footer-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); }
+      .footer-group a { display: inline-flex; align-items: center; gap: 0.3em; color: var(--fg); text-decoration: none; transition: color 250ms linear; }
+      .footer-group a:hover { color: var(--muted); }
+      .footer-group a svg { width: 10px; height: 10px; }
+      .footer-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); padding-top: var(--space-8); border-top: 1px solid var(--border-soft); }
+      .footer-bar .social { display: flex; gap: var(--space-4); }
+      .footer-bar .social a { display: grid; place-items: center; width: 24px; height: 24px; color: var(--fg); }
+      .footer-bar .social svg { width: 16px; height: 16px; }
+      .footer-bar .legal { display: flex; flex-wrap: wrap; gap: var(--space-2); color: var(--fg); }
+      .footer-bar .legal a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--meta); text-underline-offset: 2px; }
+      .footer-bar .lang { height: 40px; gap: 0.3em; }
+      .footer-bar .lang span { color: var(--muted); }
+      @media (max-width: 720px) { .footer-columns { grid-template-columns: 1fr 1fr; } }
+
+      @media (max-width: 720px) { .copy { padding: 18vh var(--space-5); } }
+      @media (prefers-reduced-motion: reduce) { .chrome .letter, .chrome .hero-big { opacity: 1; animation: none; transform: none; } }
+    </style>
+  </head>
+  <body>
+    <!-- Canvas layer -->
+    <div class="stage" aria-hidden="true">
+      <canvas id="astra"></canvas>
+    </div>
+
+    <!-- Site header -->
+    <header class="site-header">
+      <div class="bar">
+        <a class="wordmark" href="https://ryokuryuneko.top/">Ryokuryuneko</a>
+        <nav aria-label="Primary">
+          <a href="#hero">首页</a><a href="#about">简介</a><a href="#links">网址</a><a href="#find">其他</a>
+        </nav>
+        <div class="nav-actions">
+          <a class="btn btn-glass" href="https://ryokuryuneko.top/webs.html">更多 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m4 6 4 4 4-4"/></svg></a>
+          <a class="btn btn-primary" href="https://space.bilibili.com/1948701915/">Bilibili <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero chrome: bottom-left small/big/small title stack, scroll hint, replay -->
+    <div class="chrome" id="chrome" aria-hidden="true">
+      <div class="hero-stack">
+        <p class="hero-kicker" data-astra-label="left">Ryokuryuneko</p>
+        <p class="hero-big">喵！探索未至之境！</p>
+        <p class="hero-kicker" data-astra-label="left">WZL</p>
+      </div>
+      <p class="scroll-hint">往下滑</p>
+      <button class="replay" id="replay" type="button" aria-label="重新播放入场">↻</button>
+    </div>
+
+    <main class="page" id="page">
+      <h1 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Ryokuryuneko · 喵！探索未至之境！</h1>
+
+      <!-- Screen 1: only the galaxy. No copy here. -->
+      <section class="hero" id="hero" aria-hidden="true"></section>
+
+      <!-- Screen 2: the title stage. Its position drives tilt and scatter. -->
+      <section class="copy title-stage" id="about" data-astra-intro>
+        <h2 data-astra-title>一只认真躺平的猫</h2>
+        <p class="lede">我是 Ryokuryuneko —— 一只躺在星空里的猫。游戏名统一叫 WZL0813，昵称统一叫 Ryokuryuneko，有事加 <a href="#" data-copy="2411273874" id="qq">2411273874</a>。</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://blog.ryokuryuneko.top/">访问博客</a>
+          <a class="btn btn-glass" href="#links">认识这只会喵的</a>
+        </div>
+      </section>
+
+      <section class="copy">
+        <h2>从一颗新星开始</h2>
+        <p>ryokuryuneko.top 是这一切的起点：一个崭新的域名、一块还空着的版图，和一只正要躺进去的猫。博客、旗下所有网址、还有正在翻新的 WordPass，都从这里长出来。</p>
+        <p>身份统一，名字统一，不为别的——就是为了不管走到哪儿，你都能认出一模一样的这只猫，喵。</p>
+      </section>
+
+      <!-- Cue 1: stars form the cursor, then dissolve. -->
+      <section class="cue" data-astra-shape="cursor">
+        <div class="cue-target"><svg aria-hidden="true" fill="none"></svg></div>
+        <p class="caption">新的开始</p>
+        <p class="cue-note">从 ryokuryuneko.top 出发，博客、WordPass 和旗下各域名一起生长，一步一个爪印。</p>
+      </section>
+
+      <section class="copy" id="links">
+        <h2>猫猫的栖息地</h2>
+        <p>我把住的地方拆成了几间，随便挑一间就有猫，躺平了欢迎来踩。</p>
+        <ul class="link-list">
+          <li><a href="https://blog.ryokuryuneko.top/">博客 Blog <small>blog.ryokuryuneko.top</small></a></li>
+          <li><a href="https://ryokuryuneko.top/webs.html">旗下所有网址 <small>ryokuryuneko.top/webs.html</small></a></li>
+          <li><a href="https://new.ryokuryuneko.top/">WordPass · 新页面 <small>new.ryokuryuneko.top</small></a></li>
+        </ul>
+      </section>
+
+      <!-- Cue 2 (last, holds): the cat. The identity mark. -->
+      <section class="cue" data-astra-shape="cat" data-astra-paths='["M12 21 C7.5 21 5 19 4.8 14.5 C4.6 11 4.8 8 5.5 5.5 L4 1.2 L7.5 4.5 C9 3.4 15 3.4 16.5 4.5 L20 1.2 L18.5 5.5 C19 8 19.4 11 19.2 14.5 C19 19 16.5 21 12 21"]' data-astra-viewbox="0 0 24 24">
+        <div class="cue-target"><svg aria-hidden="true" fill="none"></svg></div>
+        <p class="caption">躺平的猫猫</p>
+        <p class="cue-note">自己是一只猫猫，就赖在星空里不挪窝。事少，猫乖，欢迎来逛，喵。</p>
+      </section>
+
+      <section class="copy tail" id="find">
+        <p>自己是一只猫猫 躺平了喵</p>
+        <pre class="ascii-cat" aria-hidden="true">　　       　∧,,　
+　　　　ヾ ｀. ､`フ
+　　　(,｀'´ヽ､､ﾂﾞ
+　 (ヽｖ'　　　`''ﾞつ
+　　,ゝ　 ⌒`ｙ'''´
+　 （ (´＾ヽこつ
+　　 ) )
+　　(ノ</pre>
+        <p>想找到我？</p>
+        <p><a class="btn btn-glass" href="https://space.bilibili.com/1948701915/">Bilibili</a> <a class="btn btn-glass" href="https://github.com/WZL0813/">GitHub</a></p>
+      </section>
+
+      <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-columns">
+          <div class="footer-group"><h4>足迹</h4><ul><li><a href="https://space.bilibili.com/1948701915/">Bilibili</a></li><li><a href="https://github.com/WZL0813/">GitHub <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 8 8 2M3 2h5v5"/></svg></a></li></ul></div>
+          <div class="footer-group"><h4>网址</h4><ul><li><a href="https://blog.ryokuryuneko.top/">博客 Blog</a></li><li><a href="https://new.ryokuryuneko.top/">WordPass 新页面</a></li><li><a href="https://ryokuryuneko.top/webs.html">旗下所有网址 <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 8 8 2M3 2h5v5"/></svg></a></li></ul></div>
+          <div class="footer-group"><h4>关于</h4><ul><li><a href="https://ryokuryuneko.top/">简介</a></li><li><a href="https://ryokuryuneko.top/">常用名 WZL0813</a></li><li><a href="https://ryokuryuneko.top/">昵称 Ryokuryuneko</a></li></ul></div>
+          <div class="footer-group"><h4>联系</h4><ul><li><a href="#">有事加 2411273874</a></li><li><a href="https://space.bilibili.com/1948701915/">小破站私信</a></li></ul></div>
+        </div>
+        <div class="footer-bar">
+          <div class="social" aria-label="Social">
+            <a href="https://space.bilibili.com/1948701915/" aria-label="Bilibili"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3.4c-.4 0-.8.4-.8.8v1.5h-4.3V4.2c0-.4-.3-.8-.8-.8s-.8.4-.8.8v1.5H6.8V4.2c0-.4-.3-.8-.8-.8s-.8.4-.8.8v1.7c-.6 1.1-1 2.3-1 3.5v6.7a5 5 0 0 0 5 5h1.2l1.4 1.4a.8.8 0 0 0 1.1 0l1.4-1.4h1.2a5 5 0 0 0 5-5V9.6c0-1.2-.4-2.4-1-3.5V4.2c0-.4-.4-.8-.8-.8ZM8.3 8.6a.9.9 0 0 1 .9.9v1.4a.9.9 0 0 1-1.8 0V9.5a.9.9 0 0 1 .9-.9Zm7.4 0a.9.9 0 0 1 .9.9v1.4a.9.9 0 0 1-1.8 0V9.5a.9.9 0 0 1 .9-.9Zm-3.7 8.4a3.6 3.6 0 0 1-3.6-3.6c0-.4.3-.7.7-.7h5.8c.4 0 .7.3.7.7a3.6 3.6 0 0 1-3.6 3.6Zm0-1.4a2.2 2.2 0 0 0 2.1-1.4H9.9a2.2 2.2 0 0 0 2.1 1.4Z"/></svg></a>
+            <a href="https://github.com/WZL0813/" aria-label="GitHub"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><path d="M6 13.5v-2c0-.6.2-1 .5-1.3C5 10 4 9.3 4 7.5c0-.6.2-1.1.6-1.5-.1-.4-.1-1 .1-1.5.6 0 1.2.3 1.6.6a5 5 0 0 1 3.4 0c.4-.3 1-.6 1.6-.6.2.5.2 1.1.1 1.5.4.4.6.9.6 1.5 0 1.8-1 2.5-2.5 2.7.3.3.5.7.5 1.3v2"/></svg></a>
+          </div>
+          <div class="legal">
+            <span>Make by <strong>WZL</strong>0813(Ryokuryuneko)</span>
+            <span>All Rights Reserved</span>
+            <span>Design: WZL(Ryokuryuneko)</span>
+            <span>&copy; Ryokuryuneko &infin;</span>
+            <a href="https://icp.gov.moe/?keyword=20253180" target="_blank" rel="noopener">萌ICP备20253180号</a>
+            <a href="https://ryokuryuneko.top/">返回首页</a>
+          </div>
+          <a class="btn btn-glass lang" href="https://ryokuryuneko.top/"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2.5 2.5 2.5 9.5 0 12M8 2c-2.5 2.5-2.5 9.5 0 12"/></svg>中文 <span>简体</span></a>
+        </div>
+      </div>
+      </footer>
+    </main>
+
+    <script type="module">
+      import {
+        createAstraScene,
+        createShapeSamples,
+        detectWebGL,
+        prefersReducedMotion,
+        renderStaticFallback,
+        PATH_PRESETS,
+      } from './js/starflow.js'
+
+      const canvas = document.getElementById('astra')
+      const chrome = document.getElementById('chrome')
+      const siteHeader = document.querySelector('.site-header')
+      const siteFooter = document.querySelector('.site-footer')
+      const stage = document.querySelector('.stage')
+      const intro = document.querySelector('[data-astra-intro]')
+      const title = document.querySelector('[data-astra-title]')
+      const copyBlocks = Array.from(document.querySelectorAll('.copy'))
+      const root = document.documentElement
+
+      // 800px of scroll = progress 1 (the page's disperse distance).
+      const DISPERSE_DISTANCE = 800
+      const TITLE_PARALLAX = 120
+
+      // ── Split labels into letters with the staggered reveal ──
+      for (const label of document.querySelectorAll('[data-astra-label]')) {
+        const fromLeft = label.dataset.astraLabel === 'left'
+        const letters = Array.from(label.textContent.trim())
+        label.setAttribute('aria-label', letters.join(''))
+        label.textContent = ''
+        letters.forEach((char, i) => {
+          const span = document.createElement('span')
+          span.className = 'letter'
+          span.textContent = char === ' ' ? ' ' : char
+          const order = fromLeft ? letters.length - 1 - i : i
+          span.style.setProperty('--astra-label-delay', `${(0.85 + order * 0.1).toFixed(2)}s`)
+          span.style.setProperty('--astra-label-shift', fromLeft ? '-44px' : '44px')
+          label.appendChild(span)
+        })
+      }
+
+      // Copy the QQ number to the clipboard when tapped.
+      const qq = document.getElementById('qq')
+      if (qq) qq.addEventListener('click', async (e) => {
+        e.preventDefault()
+        try { await navigator.clipboard.writeText('2411273874') } catch {}
+        qq.textContent = '2411273874（已复制）'
+        setTimeout(() => { qq.textContent = '2411273874' }, 1600)
+      })
+
+      // ── "Ryokuryuneko" as hand-authored stroke paths (same renderer as the cat: no skeletonization, no lost strokes) ──
+      const WORD_VIEWBOX = [0, 0, 1180, 130]
+      const WORD_PATHS = [
+        // R
+        'M10,90 L10,10 L48,10 C65,10 74,18 74,32 C74,46 65,54 48,54 L10,54 M42,54 C54,66 66,80 78,92',
+        // y
+        'M110,30 C119,49 129,69 137,88 M162,30 C149,60 131,96 119,116',
+        // o
+        'M212,55 C212,35 224,22 240,22 C256,22 268,35 268,55 C268,75 256,88 240,88 C224,88 212,75 212,55 Z',
+        // k
+        'M310,90 L310,8 M348,30 C332,41 320,51 310,62 M320,52 C331,65 342,78 354,91',
+        // u
+        'M410,30 L410,70 C410,85 418,92 432,92 C446,92 454,85 454,70 L454,30',
+        // r
+        'M510,90 L510,30 M510,46 C511,33 521,27 542,27',
+        // y
+        'M610,30 C619,49 629,69 637,88 M662,30 C649,60 631,96 619,116',
+        // u
+        'M710,30 L710,70 C710,85 718,92 732,92 C746,92 754,85 754,70 L754,30',
+        // n
+        'M810,90 L810,30 M810,46 C811,33 821,27 838,27 C854,27 862,36 862,52 L862,90',
+        // e
+        'M906,60 C906,40 918,26 934,26 C950,26 962,40 962,58 L906,58 C906,78 918,92 936,92 C948,92 957,86 961,78',
+        // k
+        'M1010,90 L1010,8 M1048,30 C1032,41 1020,51 1010,62 M1020,52 C1031,65 1042,78 1054,91',
+        // o
+        'M1112,55 C1112,35 1124,22 1140,22 C1156,22 1168,35 1168,55 C1168,75 1156,88 1140,88 C1124,88 1112,75 1112,55 Z',
+      ]
+      const wordSource = { type: 'paths', paths: WORD_PATHS, viewBox: WORD_VIEWBOX }
+
+      // ── Static fallback: no WebGL, or the reader asked for reduced motion ──
+      if (!detectWebGL() || prefersReducedMotion()) {
+        root.dataset.astraStatic = 'true'
+        renderStaticFallback(canvas, wordSource, { starCount: 12000, size: 1.3, scatter: 0.018, palette: 'astra' })
+        drawCuePaths()
+        throw new Error('Starflow: static fallback (no WebGL or reduced motion)')
+      }
+
+      const astra = createAstraScene(canvas, {
+        ambientColor: getComputedStyle(root).getPropertyValue('--astra-ambient-color').trim() || '#23435f',
+        ambientOpacity: 0.28, vignette: 0.9,
+      })
+      window.__astra = astra
+      astra.setSource(wordSource, { starCount: 12000, size: 1.3, scatter: 0.018, backgroundRatio: 0.14, palette: 'astra' })
+
+      // ── Cues: pre-sample every path once; scrolling only swaps texture data ──
+      function cueShape(element) {
+        const id = element.dataset.astraShape
+        if (element.dataset.astraPaths) {
+          const paths = JSON.parse(element.dataset.astraPaths)
+          const viewBox = (element.dataset.astraViewbox || '0 0 100 100').split(/\s+/).map(Number)
+          return { id, paths, viewBox }
+        }
+        const preset = PATH_PRESETS[id]
+        if (!preset) throw new Error(`Starflow: unknown shape "${id}". Use a preset (${Object.keys(PATH_PRESETS).join(', ')}) or data-astra-paths.`)
+        return { id, paths: preset.paths, viewBox: preset.viewBox }
+      }
+      function drawCuePaths() {
+        for (const element of document.querySelectorAll('[data-astra-shape]')) {
+          const { paths, viewBox } = cueShape(element)
+          const svg = element.querySelector('svg')
+          if (!svg) continue
+          svg.setAttribute('viewBox', viewBox.join(' '))
+          svg.innerHTML = paths.map((d) => `<path d="${d}" stroke="currentColor" stroke-width="${viewBox[3] / 24}"/>`).join('')
+        }
+      }
+      drawCuePaths()
+      const cues = Array.from(document.querySelectorAll('[data-astra-shape]')).map((element, index, all) => {
+        const { id, paths, viewBox } = cueShape(element)
+        return {
+          id,
+          element,
+          target: element.querySelector('.cue-target') ?? element,
+          samples: createShapeSamples(paths, viewBox),
+          aspectRatio: viewBox[2] / viewBox[3],
+          holdAtRangeEnd: index === all.length - 1,
+        }
+      })
+
+      const smoothstep = (x, a, b) => {
+        const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
+        return t * t * (3 - 2 * t)
+      }
+
+      let scheduled = false
+      let lastViewportHeight = 0
+
+      function update() {
+        scheduled = false
+        const viewportHeight = window.innerHeight
+        const viewportWidth = window.innerWidth
+        const scrollTop = window.scrollY
+        if (viewportHeight !== lastViewportHeight) {
+          lastViewportHeight = viewportHeight
+          root.style.setProperty('--astra-viewport-height', `${viewportHeight}px`)
+        }
+
+        const progress = Math.max(scrollTop / DISPERSE_DISTANCE, 0)
+
+        // Tilt + scatter follow the intro block.
+        let scatterProgress = null
+        let tiltProgress = null
+        if (intro) {
+          const rect = intro.getBoundingClientRect()
+          const top = rect.top + scrollTop
+          const start = top - 0.66 * viewportHeight
+          const end = top + 0.5 * rect.height - 0.5 * viewportHeight
+          scatterProgress = Math.min(1, Math.max(0, (scrollTop - start) / Math.max(end - start, 1)))
+          tiltProgress = Math.min(1, scrollTop / Math.max(1, end))
+        }
+
+        let contentBounds = null
+        const copy = copyBlocks[0]
+        if (copy) {
+          const rect = copy.getBoundingClientRect()
+          contentBounds = { left: rect.left / viewportWidth, right: rect.right / viewportWidth }
+        }
+
+        let active = null
+        let strength = 0
+        for (const cue of cues) {
+          const rect = cue.element.getBoundingClientRect()
+          const entered = (viewportHeight - rect.top) / Math.max(viewportHeight + rect.height, 1)
+          const leaving = cue.holdAtRangeEnd ? 1 : 1 - smoothstep(entered, 0.5, 0.86)
+          const value = smoothstep(entered, 0, 0.36) * leaving
+          if (value > strength) {
+            strength = value
+            active = cue
+          }
+        }
+        const shape = { strength }
+        if (active) {
+          const rect = active.target.getBoundingClientRect()
+          const width = rect.width / Math.max(rect.height, 1) > active.aspectRatio ? rect.height * active.aspectRatio : rect.width
+          const height = width / active.aspectRatio
+          shape.id = active.id
+          shape.samples = active.samples
+          shape.centerNdc = [((rect.left + rect.width / 2) / viewportWidth) * 2 - 1, 1 - ((rect.top + rect.height / 2) / viewportHeight) * 2]
+          shape.sizeNdc = [(width / viewportWidth) * 2, (height / viewportHeight) * 2]
+        }
+
+        if (siteHeader) siteHeader.dataset.scrolled = scrollTop > 8 ? 'true' : 'false'
+        const chromeOpacity = 1 - Math.min(1, progress * 2)
+        root.style.setProperty('--astra-copy-opacity', chromeOpacity.toFixed(3))
+        chrome.style.visibility = chromeOpacity <= 0 ? 'hidden' : 'visible'
+        if (title) root.style.setProperty('--astra-title-parallax-y', `${((1 - Math.min(1, progress)) * TITLE_PARALLAX).toFixed(1)}px`)
+
+        if (siteFooter && stage) stage.style.visibility = siteFooter.getBoundingClientRect().top <= 0 ? 'hidden' : 'visible'
+        astra.setScroll({ progress, tiltProgress, scatterProgress, contentBounds, shape })
+      }
+
+      function schedule() {
+        if (scheduled) return
+        scheduled = true
+        requestAnimationFrame(update)
+      }
+      window.addEventListener('scroll', schedule, { passive: true })
+      window.addEventListener('resize', schedule, { passive: true })
+      document.getElementById('replay').addEventListener('click', () => astra.replay())
+      schedule()
+    </script>
+  </body>
+</html>
