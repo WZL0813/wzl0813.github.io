@@ -140,8 +140,11 @@
       .footer-bar .social { display: flex; gap: var(--space-4); }
       .footer-bar .social a { display: grid; place-items: center; width: 24px; height: 24px; color: var(--fg); }
       .footer-bar .social svg { width: 16px; height: 16px; }
-      .footer-bar .legal { display: flex; flex-wrap: wrap; gap: var(--space-2); color: var(--fg); }
-      .footer-bar .legal a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--meta); text-underline-offset: 2px; }
+      .footer-bar .legal { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-1); text-align: center; color: var(--fg); }
+      .footer-bar .legal p { margin: 0; font-size: var(--text-sm); line-height: 1.7; }
+      .footer-bar .legal strong { font-weight: 600; }
+      .footer-bar .legal .icp a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-muted); transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease; }
+      .footer-bar .legal .icp a:hover { color: var(--accent-soft); border-color: var(--accent-soft); }
       .footer-bar .lang { height: 40px; gap: 0.3em; }
       .footer-bar .lang span { color: var(--muted); }
       @media (max-width: 720px) { .footer-columns { grid-template-columns: 1fr 1fr; } }
@@ -192,7 +195,7 @@
         <h2 data-astra-title>一只认真躺平的猫</h2>
         <p class="lede">我是 Ryokuryuneko —— 一只躺在星空里的猫。游戏名统一叫 WZL0813，昵称统一叫 Ryokuryuneko，有事加 <a href="#" data-copy="2411273874" id="qq">2411273874</a>。</p>
         <div class="actions">
-          <a class="btn btn-primary" href="https://blog.ryokuryuneko.top/">访问博客</a>
+          <a class="btn btn-primary" href="https://ryokuryuneko.top/old。html">访问旧页面</a>
           <a class="btn btn-glass" href="#links">认识这只会喵的</a>
         </div>
       </section>
@@ -214,9 +217,8 @@
         <h2>猫猫的栖息地</h2>
         <p>我把住的地方拆成了几间，随便挑一间就有猫，躺平了欢迎来踩。</p>
         <ul class="link-list">
-          <li><a href="https://blog.ryokuryuneko.top/">博客 Blog <small>blog.ryokuryuneko.top</small></a></li>
+          <li><a href="https://ryokuryuneko.top/old.html">旧页面<small>ryokuryuneko.top/old.html</small></a></li>
           <li><a href="https://ryokuryuneko.top/webs.html">旗下所有网址 <small>ryokuryuneko.top/webs.html</small></a></li>
-          <li><a href="https://new.ryokuryuneko.top/">WordPass · 新页面 <small>new.ryokuryuneko.top</small></a></li>
         </ul>
       </section>
 
@@ -255,12 +257,11 @@
             <a href="https://github.com/WZL0813/" aria-label="GitHub"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><path d="M6 13.5v-2c0-.6.2-1 .5-1.3C5 10 4 9.3 4 7.5c0-.6.2-1.1.6-1.5-.1-.4-.1-1 .1-1.5.6 0 1.2.3 1.6.6a5 5 0 0 1 3.4 0c.4-.3 1-.6 1.6-.6.2.5.2 1.1.1 1.5.4.4.6.9.6 1.5 0 1.8-1 2.5-2.5 2.7.3.3.5.7.5 1.3v2"/></svg></a>
           </div>
           <div class="legal">
-            <span>Make by <strong>WZL</strong>0813(Ryokuryuneko)</span>
-            <span>All Rights Reserved</span>
-            <span>Design: WZL(Ryokuryuneko)</span>
-            <span>&copy; Ryokuryuneko &infin;</span>
-            <a href="https://icp.gov.moe/?keyword=20253180" target="_blank" rel="noopener">萌ICP备20253180号</a>
-            <a href="https://ryokuryuneko.top/">返回首页</a>
+            <p>Make by <strong>WZL</strong>0813(Ryokuryuneko)</p>
+            <p>All Rights Reserved</p>
+            <p>Design: WZL(Ryokuryuneko)</p>
+            <p>&copy; Ryokuryuneko &infin;</p>
+            <p class="icp"><a href="https://icp.gov.moe/?keyword=20253180" target="_blank" rel="noopener">萌ICP备20253180号</a></p>
           </div>
           <a class="btn btn-glass lang" href="https://ryokuryuneko.top/"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2.5 2.5 2.5 9.5 0 12M8 2c-2.5 2.5-2.5 9.5 0 12"/></svg>中文 <span>简体</span></a>
         </div>
