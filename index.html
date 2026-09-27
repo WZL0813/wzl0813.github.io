@@ -320,7 +320,6 @@
       })
 
       // ── "Ryokuryuneko" as hand-authored stroke paths (same renderer as the cat: no skeletonization, no lost strokes) ──
-      const WORD_VIEWBOX = [0, 0, 1180, 130]
       const WORD_PATHS = [
         // R
         'M10,90 L10,10 L48,10 C65,10 74,18 74,32 C74,46 65,54 48,54 L10,54 M42,54 C54,66 66,80 78,92',
@@ -347,22 +346,120 @@
         // o
         'M1112,55 C1112,35 1124,22 1140,22 C1156,22 1168,35 1168,55 C1168,75 1156,88 1140,88 C1124,88 1112,75 1112,55 Z',
       ]
-      const wordSource = { type: 'paths', paths: WORD_PATHS, viewBox: WORD_VIEWBOX }
+
+      // 路径里只用 M / L / C / Z，参数永远是 (x y) 成对出现，所以平移只要按奇偶改数
+      function shiftPath(d, dx, dy) {
+        return d.replace(/[MLC][^MLCZ]*/g, (token) => {
+          const numbers = (token.slice(1).match(/-?\d*\.?\d+/g) ?? []).map(Number)
+          const moved = numbers.map((v, i) => Math.round((i % 2 === 0 ? v + dx : v + dy) * 100) / 100)
+          return token[0] + moved.join(' ')
+        })
+      }
+
+      // 单行排版：整词横着铺满一屏，宽屏用，是这颗星球本来该有的样子
+      const SINGLE_VIEWBOX = [0, 0, 1180, 130]
+      const singleSource = { type: 'paths', paths: WORD_PATHS, viewBox: SINGLE_VIEWBOX }
+
+      // 两行排版：手机竖屏用。一行硬塞 12 个字母时，每个字母只有 26px 宽，
+      // 星星的像素大小不跟着星场缩放，于是全挤在笔画上糊成一根发白的亮管。
+      // 折成 Ryoku / ryuneko 两行后，每个字母差不多大一倍，名字才认得出来。
+      // left / right 是照着上面那 12 条路径量出来的：R–u 占 10–454，r–o 占 510–1168。
+      const STACK_VIEWBOX = [0, 0, 700, 250]
+      const STACK_LINES = [
+        { from: 0, to: 5, left: 10, right: 454, top: 2 },
+        { from: 5, to: 12, left: 510, right: 1168, top: 122 },
+      ]
+      const stackSource = {
+        type: 'paths',
+        viewBox: STACK_VIEWBOX,
+        paths: STACK_LINES.flatMap((line) =>
+          WORD_PATHS.slice(line.from, line.to).map((d) =>
+            shiftPath(d, (STACK_VIEWBOX[2] - (line.right - line.left)) / 2 - line.left, line.top),
+          ),
+        ),
+      }
+
+      // ── 星星预算：让"星"和"字"的比例在任何屏幕上都一样 ──
+      // 着色器里的星点是固定像素大小，不跟着星场一起缩放，所以字越小，星就得越小越少。
+      // 基准是 1440×900 的单行排版：字母高约 78px，配 12000 颗星、size 1.3、scatter 0.018。
+      // 下面的常数是 starflow 星场贴合的规矩（视口高 10.9 世界单位、星场高 9.7、fillY 0.89）。
+      const VIEW_HEIGHT = 10.9
+      const SHAPE_HEIGHT = 9.7
+      const FILL_Y = 0.89
+      const LETTER_UNITS = 80
+      const STAR_BASE = { letterPx: 78, starCount: 12000, size: 1.3, scatter: 0.018 }
+
+      function letterHeightPx(viewBox, fillX) {
+        const width = window.innerWidth
+        const height = window.innerHeight
+        const viewWidth = VIEW_HEIGHT * (width / height)
+        const shapeWidth = (viewBox[2] / viewBox[3]) * SHAPE_HEIGHT
+        const scale = Math.min((viewWidth * fillX) / shapeWidth, (VIEW_HEIGHT * FILL_Y) / SHAPE_HEIGHT)
+        return (((LETTER_UNITS / viewBox[3]) * SHAPE_HEIGHT * scale) / VIEW_HEIGHT) * height
+      }
+
+      function starBudget(viewBox, fillX) {
+        const k = Math.min(1.35, Math.max(0.2, letterHeightPx(viewBox, fillX) / STAR_BASE.letterPx))
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
+        return {
+          starCount: Math.round(clamp(STAR_BASE.starCount * k, 2400, 14000)),
+          size: Number(clamp(STAR_BASE.size * k, 0.32, 1.5).toFixed(3)),
+          scatter: Number(clamp(STAR_BASE.scatter * k, 0.004, 0.03).toFixed(4)),
+        }
+      }
+
+      const NARROW = window.matchMedia('(max-width: 760px)')
+      const wordLayout = () =>
+        NARROW.matches
+          ? { viewBox: STACK_VIEWBOX, source: stackSource, fillX: 0.9 }
+          : { viewBox: SINGLE_VIEWBOX, source: singleSource, fillX: 0.8 }
+      const wordFieldOptions = () => {
+        const layout = wordLayout()
+        return { ...starBudget(layout.viewBox, layout.fillX), backgroundRatio: 0.14, palette: 'astra' }
+      }
+
+      // Canvas 2D 回退没有 bloom，亮星是直接画一圈半径 6 倍的光晕；同样的星数和 size
+      // 放到 2D 里会糊成一根白管，所以回退单独把星压小压少，名字才认得出来。
+      const STATIC_FALLBACK = { starCount: 0.45, size: 0.48 }
+      function fallbackBudget(viewBox, fillX) {
+        const budget = starBudget(viewBox, fillX)
+        return {
+          ...budget,
+          starCount: Math.round(budget.starCount * STATIC_FALLBACK.starCount),
+          size: Number((budget.size * STATIC_FALLBACK.size).toFixed(3)),
+        }
+      }
 
       // ── Static fallback: no WebGL, or the reader asked for reduced motion ──
       if (!detectWebGL() || prefersReducedMotion()) {
+        const layout = wordLayout()
         root.dataset.astraStatic = 'true'
-        renderStaticFallback(canvas, wordSource, { starCount: 12000, size: 1.3, scatter: 0.018, palette: 'astra' })
+        renderStaticFallback(canvas, layout.source, {
+          ...fallbackBudget(layout.viewBox, layout.fillX), fillX: layout.fillX, palette: 'astra',
+        })
         drawCuePaths()
         throw new Error('Starflow: static fallback (no WebGL or reduced motion)')
       }
 
+      const initialLayout = wordLayout()
       const astra = createAstraScene(canvas, {
         ambientColor: getComputedStyle(root).getPropertyValue('--astra-ambient-color').trim() || '#23435f',
         ambientOpacity: 0.28, vignette: 0.9,
+        fillX: initialLayout.fillX,
+        // 名字早点成形，不然访客盯着一团散星，根本不知道这背景在写什么
+        introDuration: 3.4,
       })
       window.__astra = astra
-      astra.setSource(wordSource, { starCount: 12000, size: 1.3, scatter: 0.018, backgroundRatio: 0.14, palette: 'astra' })
+      astra.setSource(initialLayout.source, wordFieldOptions())
+
+      // 跨过断点（手机横竖屏切换、桌面拖窗口）时换排版；setSource 会自己重放一次入场
+      const onBreakpoint = () => {
+        const layout = wordLayout()
+        astra.setConfig({ fillX: layout.fillX })
+        astra.setSource(layout.source, wordFieldOptions())
+      }
+      if (NARROW.addEventListener) NARROW.addEventListener('change', onBreakpoint)
+      else NARROW.addListener(onBreakpoint)
 
       // ── Cues: pre-sample every path once; scrolling only swaps texture data ──
       function cueShape(element) {
